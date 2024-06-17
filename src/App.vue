@@ -191,10 +191,10 @@ watch(state, () => {
 </template> -->
 
 <!-- deep - 僅監聽精確對象 -->
-<script setup>
+<!-- <script setup>
 import { ref, watch } from 'vue'
 const state = ref({
-  name: 'Ran'
+  name: 'Ran',
   age: 18
  })
 const changeName = () => {
@@ -203,15 +203,16 @@ const changeName = () => {
 }
 const changeAge = () => {
   // 修改age
-  state.value.age = 'I am
+  state.value.age = 24
 }
 // TODO: 精確監聽某個具體屬性
-watch(state, () => {
-  console.log('count變化了')
-}, {
-  // 會在初始載入時先執行一次
-  // deep: true
-})
+watch(
+  () => state.value.age,
+  () => {
+    console.log('age變化了')
+  }
+)
+// deep性能損耗 建議不開啟
 </script>
 <template>
   <div>當前name - {{ state.name }}</div>
@@ -220,13 +221,97 @@ watch(state, () => {
     <button @click="changeName">修改name</button>
     <button @click="changeAge">修改age</button>
   </div>
+</template> -->
+
+<!-- 生命週期函數應用 -->
+<!-- <script setup>
+// 1. 引入函數
+import { onMounted } from 'vue'
+// 2. 執行函數 傳入回傳
+onMounted(() => {
+  console.log('組件掛載完畢mounted執行了1')
+  // 原邏輯
+})
+// 多次執行
+onMounted(() => {
+  console.log('組件掛載完畢mounted執行了2')
+  // 補充邏輯
+})
+onMounted(() => {
+  console.log('組件掛載完畢mounted執行了3')
+})
+</script> -->
+
+<!-- 組合式API下的父傳子(配合son-com.vue) -->
+<!-- <script setup>
+// setup 語法下局部組件無須註冊即可使用
+import { ref } from 'vue' 
+import SonCom from './son-com.vue'
+const count = ref(100)
+setTimeout(() => {
+  count.value = 200
+}, 3000)
+</script>
+<template>
+  <div class="father">
+    // 1. 綁定屬性(響應式資料前面需加:)
+     <SonCom :count="count" message="father message" />
+  </div>
+</template> -->
+
+<!-- 組合式API下的子傳父(配合son-com.vue) -->
+<!-- <script setup>
+// setup 語法下局部組件無須註冊即可使用
+// import { ref } from 'vue' 
+import SonCom from './son-com.vue'
+const getMessage = (msg) => {
+  console.log(msg)
+}
+</script>
+<template>
+  <div class="father">
+    <h2>父組件App</h2>
+    // 1. 綁定事件
+    <SonCom @get-message="getMessage"/>
+  </div>
+</template> -->
+
+<!-- 模板引用 -->
+<!-- <script setup>
+import { onMounted, ref } from 'vue';
+import TestCom from './test-com.vue'
+// 1. 調用ref函數 -> ref對象
+const h1Ref = ref(null)
+const comRef = ref(null)
+// 組件掛載完畢後才能獲取
+onMounted(() => {
+  console.log(h1Ref.value)
+  console.log(comRef.value)
+})
+</script>
+<template>
+  // 2. 通過ref標示綁定ref對象
+  <h1 ref="h1Ref">我是dom標籤h1</h1>
+  <TestCom ref="comRef" />
+</template> -->
+
+<!-- provide與inject -->
+<script setup>
+import RoomPage from './room-page.vue'
+</script>
+<template>
+  <div>
+    <RoomPage />
+  </div>
 </template>
 
-<script setup>
 
+
+<!-- <script setup>
+  
 </script>
 <template>
   <div>
 
   </div>
-</template>
+</template> -->
